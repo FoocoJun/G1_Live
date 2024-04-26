@@ -9,6 +9,7 @@ public class Pool {
 	private IObjectPool<GameObject> _pool;
 
 	private Transform _root;
+    // 프리팹 한 곳에 모아보기 위한 Root GO 생성
 	private Transform Root {
 		get {
 			if (_root == null) {
@@ -22,6 +23,7 @@ public class Pool {
 
 	public Pool(GameObject prefab) {
 		_prefab = prefab;
+        // 유니티 풀링 설정 셋팅 (만들어졌을 때 ~ 완전히 파괴 될 때 할 행동)
 		_pool = new ObjectPool<GameObject>(OnCreate, OnGet, OnRelease, OnDestroy);
 	}
 
