@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// 잡다한 쓰로틀링 변수 관리
 public class InitBase : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    protected bool _init = false;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public virtual bool Init() {
+        if(_init) {
+            return false;
+        }
+        _init = true;
+        return true;
+    }
+    
+    private void Awake() {
+        Init();
     }
 }
