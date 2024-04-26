@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameScene : BaseScene
-{
+public class GameScene : BaseScene {
     public override bool Init()
     {
         if (base.Init() == false) {
@@ -14,5 +13,9 @@ public class GameScene : BaseScene
         // TODO
 
         return true;
+    }
+
+    public override void Clear() {
+        // TODO
     }
 }

@@ -26,4 +26,8 @@ public class TitleScene : BaseScene {
             }
         });
     }
+
+    public override void Clear() {
+        // TODO
+    }
 }
