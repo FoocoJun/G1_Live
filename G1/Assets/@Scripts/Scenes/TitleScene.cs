@@ -2,10 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TitleScene : BaseScene
-{
+public class TitleScene : BaseScene {
+    // 부모가 초기화 할 것 다 하고 나머지 씬 별 설정
+    public override bool Init()
+    {
+        if (base.Init() == false) {
+            return false;
+        }
+        SceneType = Define.EScene.TitleScene;
+
+        StartLoadAssets();
+
+        return true;
+    }
     // Start is called before the first frame update
-    void Start()
+    void StartLoadAssets()
     {
         Managers.Resource.LoadAllAsync<Object>("PreLoad", (key, count, totalCount) => {
             Debug.Log($"{key} {count}/{totalCount}");
@@ -14,11 +25,5 @@ public class TitleScene : BaseScene
                 //Managers.Data.init();
             }
         });
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }
