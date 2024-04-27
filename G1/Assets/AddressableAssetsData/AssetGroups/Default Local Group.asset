@@ -16,7 +16,22 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: 596661491f2b75f408672329236b36ae
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 47fa580edd880c749a479a92662f21a4
+    m_Address: Assets/@Resources/Spines/wizard/wizard_SkeletonData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e308705ac9a774499fb319ab993deb4
+    m_Address: Assets/@Resources/Spines/knight/knight_SkeletonData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bf9ec093fe189a04d92278eaa0f28574
+    m_Address: Assets/@Resources/Spines/goblin/goblin_SkeletonData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8637a8b8a4b252044ba3ecf385740ed9, type: 2}
   m_SchemaSet:
