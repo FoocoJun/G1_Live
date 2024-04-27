@@ -33,7 +33,7 @@ public class UI_Base : InitBase {
 
     protected void BindObjects(Type type) { Bind<GameObject>(type); }
     protected void BindImages(Type type) { Bind<Image>(type); }
-    protected void BindTexts(Type type) { Bind<Text>(type); }
+    protected void BindTexts(Type type) { Bind<TMP_Text>(type); }
     protected void BindButtons(Type type) { Bind<Button>(type); }
     protected void BindToggle(Type type) { Bind<Toggle>(type); }
 
