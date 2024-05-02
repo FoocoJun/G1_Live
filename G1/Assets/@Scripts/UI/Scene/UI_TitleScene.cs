@@ -52,8 +52,13 @@ public class UI_TitleScene : UI_Scene
             Debug.Log($"{key} {count}/{totalCount}");
 
             if (count == totalCount) {
+                // Data 불러오기
+                Managers.Data.Init();
+
                 GetObject((int)GameObjects.StartImage).gameObject.SetActive(true);
                 GetText((int)Texts.DisplayText).text = $"Touch To Start";
+
+                Debug.Log($"{Managers.Data.TestDic[1].Name}");
             }
         });
     }
