@@ -48,6 +48,7 @@ public class SoundManager
 	}
 
 	public void Play(Define.ESound type, string key, float pitch = 1.0f) {
+        // 실행할 오디오소스 컴포넌트의 오디오 소스를 찾기
 		AudioSource audioSource = _audioSources[(int)type];
 
         // BGM 일때는 무한 / 아닐때는 한 번
@@ -88,19 +89,25 @@ public class SoundManager
 		audioSource.Stop();
 	}
 
+    // key로 오디오 소스 불러온 후 콜백 실행하기.
 	private void LoadAudioClip(string key, Action<AudioClip> callback) {
+        // 빈 오디오 클립(리소스)
 		AudioClip audioClip = null;
+        // 혹 미리 불러둔 오디오클립들 중에 있으면 오디오클립에 할당 후 콜백 실행
 		if (_audioClips.TryGetValue(key, out audioClip)) {
 			callback?.Invoke(audioClip);
 			return;
 		}
 
+        // 없으면 리소스 메니저로 로드하기
 		audioClip = Managers.Resource.Load<AudioClip>(key);
 
+        // 불러온 시점에 오디오 클립들에 불러온 오디오 클립(리소스) 없으면 담기
 		if (_audioClips.ContainsKey(key) == false) {
 			_audioClips.Add(key, audioClip);
         }
 
+        // 콜백 실행
 		callback?.Invoke(audioClip);
 	}
 }
