@@ -16,4 +16,10 @@ public static class Define
         PointerUp,
         Drag,
     }
+
+    public enum ESound {
+        Bgm,
+        Effect,
+        Max,
+    }
 }
