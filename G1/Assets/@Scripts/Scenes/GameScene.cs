@@ -15,6 +15,8 @@ public class GameScene : BaseScene {
         map.name = "@BaseMap";
         // TODO
 
+        Managers.Object.Spawn<Hero>(Vector3.zero);
+
         return true;
     }
 
