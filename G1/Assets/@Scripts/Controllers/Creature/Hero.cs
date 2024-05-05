@@ -1,18 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Define;
 
-public class Hero : BaseObject
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+public class Hero : Creature {
+    public override bool Init() {
+        if (base.Init() == false) {
+            return false;
+        }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        CreatureType = ECreatureType.Hero;
+        CreatureState = ECreatureState.Idle;
+        Speed = 5.0f;
+
+        return true;
     }
 }
