@@ -7,6 +7,16 @@ public class Managers : MonoBehaviour
     private static Managers s_instance;
     private static Managers Instance { get { Init(); return s_instance; }}
 
+    // 게임 컨텐츠용 매니저
+    #region Contents
+    private GameManager _game = new GameManager();
+    private ObjectManager _object = new ObjectManager();
+
+    public static GameManager Game { get { return Instance?._game; } }
+    public static ObjectManager Object { get { return Instance?._object; } }
+    #endregion
+
+    // 프레임워크 공용 매니저
     #region Core
     private DataManager _data = new DataManager();
     private PoolManager _pool = new PoolManager();
