@@ -19,7 +19,7 @@ public class ObjectManager {
     }
 
     public Transform HeroRoot { get { return GetRootTransform("@Heroes"); } }
-    public Transform MonsterRoot { get { return GetRootTransform("Monsters"); } }
+    public Transform MonsterRoot { get { return GetRootTransform("@Monsters"); } }
     #endregion
 
     public T Spawn<T>(Vector3 position) where T : BaseObject {
