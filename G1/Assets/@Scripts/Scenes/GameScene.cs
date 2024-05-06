@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameScene : BaseScene {
@@ -15,8 +16,14 @@ public class GameScene : BaseScene {
         map.name = "@BaseMap";
         // TODO
 
+        // 캐릭터 생성
         Hero hero = Managers.Object.Spawn<Hero>(Vector3.zero);
 
+        // 카메라 셋팅
+        CameraController camera = Camera.main.GetOrAddComponent<CameraController>();
+        camera.Target = hero;
+
+        // 조이스틱 컨트롤러 생성
         Managers.UI.ShowBaseUI<UI_Joystick>();
 
         return true;
