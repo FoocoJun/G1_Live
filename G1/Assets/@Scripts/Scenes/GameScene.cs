@@ -17,6 +17,8 @@ public class GameScene : BaseScene {
 
         Hero hero = Managers.Object.Spawn<Hero>(Vector3.zero);
 
+        Managers.UI.ShowBaseUI<UI_Joystick>();
+
         return true;
     }
 
