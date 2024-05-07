@@ -34,12 +34,18 @@ public class Monster : Creature {
         }
 
         CreatureType = ECreatureType.Monster;
-        CreatureState = ECreatureState.Idle;
         Speed = 3.0f;
 
         StartCoroutine(CoUpdateAI());
 
         return true;
+    }
+
+    public override void SetInfo(int templateID) {
+        base.SetInfo(templateID);
+
+        // State
+        CreatureState = ECreatureState.Idle;
     }
 
     // Init 당시에는 position이 선언되어 있지 않음

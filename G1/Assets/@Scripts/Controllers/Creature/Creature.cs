@@ -1,13 +1,37 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Spine.Unity;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static Define;
 
 public class Creature : BaseObject
 {
-    public float Speed { get; protected set; } = 1.0f;
+    public float Speed = 8.0f;
+    public Data.CreatureData CreatureData { get; private set; }
     public ECreatureType CreatureType { get; protected set; } = ECreatureType.None;
+
+    #region  Stats
+    public float HP;
+    public float MaxHp;
+    public float MaxHpBonus;
+    public float Atk;
+    public float AtkRange;
+    public float AtkBonus;
+    public float Def;
+    public float MoveSpeed;
+    public float TotalExp;
+    public float HpRate;
+    public float AtkRate;
+    public float DefRate;
+    public float MoveSpeedRate;
+    public string SkeletonDataID;
+    public string AnimatorName;
+    public List<int> SkillIdList = new List<int>();
+    public int DropItemId;
+    #endregion
+
     protected ECreatureState _creatureState = ECreatureState.None;
 
     public virtual ECreatureState CreatureState {
@@ -46,9 +70,38 @@ public class Creature : BaseObject
         }
 
         ObjectType = EObjectType.Creature;
-        CreatureState = ECreatureState.Idle;
 
         return true;
+    }
+
+    public virtual void SetInfo(int templateId) {
+        DataTemplateID = templateId;
+
+        CreatureData = Managers.Data.CreatureDic[templateId];
+
+        gameObject.name = $"{CreatureData.DataId}_{CreatureData.DescriptionTextID}";
+        
+        // Collider
+        Collider.offset = new Vector2(CreatureData.ColliderOffsetX, CreatureData.ColliderOffstY);
+        Collider.radius = CreatureData.ColliderRadius;
+
+        // RigidBody
+        RigidBody.mass = CreatureData.Mass;
+
+        // Spine
+        SetSpineAnimation(CreatureData.SkeletonDataID, SortingLayers.CREATURE);
+
+        // TODO
+        // Skills
+
+        // state
+        HP = CreatureData.MaxHp;
+        MaxHp = CreatureData.MaxHp;
+        Atk = CreatureData.Atk;
+
+        MoveSpeed = CreatureData.MoveSpeed;
+
+        CreatureState = ECreatureState.Idle;
     }
 
     #region AI (FSM)
