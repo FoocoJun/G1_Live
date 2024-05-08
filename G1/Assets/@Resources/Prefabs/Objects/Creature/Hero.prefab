@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5182487736261316860}
   - component: {fileID: 621101116729802775}
   - component: {fileID: -1181203074363031783}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Hero
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -201,3 +201,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe61dfa4d820ac648ad89b8dd05e6313, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Speed: 8
+  HP: 0
+  MaxHp: 0
+  MaxHpBonus: 0
+  Atk: 0
+  AtkRange: 0
+  AtkBonus: 0
+  Def: 0
+  MoveSpeed: 0
+  TotalExp: 0
+  HpRate: 0
+  AtkRate: 0
+  DefRate: 0
+  MoveSpeedRate: 0
+  SkeletonDataID: 
+  AnimatorName: 
+  SkillIdList: 
+  DropItemId: 0

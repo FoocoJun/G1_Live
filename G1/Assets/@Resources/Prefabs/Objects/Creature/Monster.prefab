@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7660970308699611429}
   - component: {fileID: 2732481965720521908}
   - component: {fileID: 8714626860796397527}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Monster
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,6 +139,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 8
+  HP: 0
   MaxHp: 0
   MaxHpBonus: 0
   Atk: 0

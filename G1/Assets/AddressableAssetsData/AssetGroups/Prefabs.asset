@@ -41,6 +41,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - PreLoad
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2b57e4cfc990a9d4393936a5d52a34a1
+    m_Address: HeroCamp
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - PreLoad
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 8637a8b8a4b252044ba3ecf385740ed9, type: 2}
   m_SchemaSet:
