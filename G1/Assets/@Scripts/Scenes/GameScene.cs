@@ -16,13 +16,22 @@ public class GameScene : BaseScene {
         GameObject map = Managers.Resource.Instantiate("BaseMap");
         map.transform.position = Vector3.zero;
         map.name = "@BaseMap";
+
+        Vector3 startPosition = new Vector3Int(-10, Random.Range(-5, 5), 0);
+
+        HeroCamp camp = Managers.Object.Spawn<HeroCamp>(startPosition, 0);
+
+        // 카메라 셋팅
+        CameraController camera = Camera.main.GetOrAddComponent<CameraController>();
+        camera.Target = camp;
+        
         // TODO
 
-        // 캐릭터 생성
-        
-        Vector3 heroTmpStartPosition = new Vector3Int(-10, -5, 0);
-        Hero hero = Managers.Object.Spawn<Hero>(heroTmpStartPosition, HERO_KNIGHT_ID);
-        
+        // 캐릭터 생성        
+        for (int i = 0; i< 4; i++) {
+            Vector3 subHeroTmpStartPosition = new Vector3Int(-10 + Random.Range(-5, 5), -5 + Random.Range(-5, 5), 0);
+            Hero hero = Managers.Object.Spawn<Hero>(subHeroTmpStartPosition, HERO_KNIGHT_ID);
+        }
 
         {
             Vector3 monsterTmpStartPosition = new Vector3Int(0, 1, 0);
@@ -35,10 +44,6 @@ public class GameScene : BaseScene {
             Env env = Managers.Object.Spawn<Env>(envTempStartPosition, ENV_TREE1_ID);
             env.EnvState = EEnvState.Idle;
         }
-
-        // 카메라 셋팅
-        CameraController camera = Camera.main.GetOrAddComponent<CameraController>();
-        camera.Target = hero;
 
         // 조이스틱 컨트롤러 생성
         Managers.UI.ShowBaseUI<UI_Joystick>();

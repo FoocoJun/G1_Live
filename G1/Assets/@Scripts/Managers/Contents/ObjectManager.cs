@@ -9,6 +9,8 @@ public class ObjectManager {
     public HashSet<Monster> Monsters { get; } = new HashSet<Monster>();
     public HashSet<Env> Envs { get; } = new HashSet<Env>();
 
+    public HeroCamp Camp { get; private set; } = new HeroCamp();
+
     #region Roots
     public Transform GetRootTransform(string name) {
         GameObject root = GameObject.Find(name);
@@ -70,6 +72,8 @@ public class ObjectManager {
             Envs.Add(env);
 
             env.SetInfo(templateID);
+        } else if (obj.ObjectType == EObjectType.HeroCamp) {
+            Camp = go.GetComponent<HeroCamp>();
         }
 
         return obj as T;
@@ -93,7 +97,10 @@ public class ObjectManager {
         } else if (obj.ObjectType == EObjectType.Env) {
             Env env = obj as Env;
             Envs.Remove(env);
+        } else if (obj.ObjectType == EObjectType.HeroCamp) {
+            Camp = null;
         }
+
 
         Managers.Resource.Destroy(obj.gameObject);
     }
