@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Spine;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -13,7 +15,9 @@ public class Hero : Creature {
             _needArrange = value;
 
             if (value) {
-                // ChangeColliderSize
+                ChangeColliderSize(EColliderSize.Big);
+            } else {
+                TryResizeCollider();
             }
         }
     }
@@ -35,13 +39,13 @@ public class Hero : Creature {
 
             switch (value) {
                 case EHeroMoveState.CollectEnv:
-                    //
+                    NeedArrange = true;
                     break;
                 case EHeroMoveState.TargetMonster:
-                    //
+                    NeedArrange = true;
                     break;
                 case EHeroMoveState.ForceMove:
-                    //
+                    NeedArrange = true;
                     break;
             }
         }
@@ -88,6 +92,8 @@ public class Hero : Creature {
             return ColliderRadius + targetRadius + 2.0f;
         }
     }
+
+    public float StopDistance { get; private set; } = 1.0f;
 
     BaseObject _target;
 
@@ -176,6 +182,23 @@ public class Hero : Creature {
         }
 
         // 3. Camp 주변으로 모이기
+        if (HeroMoveState == EHeroMoveState.ReturnToCamp) {
+            Vector3 dir = HeroCampDest.transform.position - transform.position;
+            float distanceSqr = dir.sqrMagnitude;
+            float StopDistanceSqr = StopDistance * StopDistance;
+
+            if (distanceSqr <= StopDistanceSqr) {
+                HeroMoveState = EHeroMoveState.None;
+                CreatureState = ECreatureState.Idle;
+                NeedArrange = false;
+                return;
+            } else {
+                float ratio = Mathf.Min(1, dir.magnitude); // TEMP
+                float moveSpeed = MoveSpeed * (float)Math.Pow(ratio, 3);
+                SetRigidBodyVelocity(dir.normalized * moveSpeed);
+                return;
+            }
+        }
 
         // 4. 기타 (누르다 땠을 때)
         CreatureState = ECreatureState.Idle;
@@ -184,10 +207,11 @@ public class Hero : Creature {
         // 0. 누르고 있다면 강제 이동.
         if (HeroMoveState == EHeroMoveState.ForceMove) {
             CreatureState = ECreatureState.Move;
+            return;
+        }
 
-            Vector3 dir = HeroCampDest.position - transform.position;
-
-            SetRigidBodyVelocity(dir.normalized * MoveSpeed);
+        if (_target.IsValid() == false) {
+            CreatureState = ECreatureState.Move;
             return;
         }
         
@@ -278,5 +302,35 @@ public class Hero : Creature {
             CreatureState = ECreatureState.Skill;
             return;
         }
+    }
+
+    private void TryResizeCollider() {
+        ChangeColliderSize(EColliderSize.Small);
+
+        foreach(var hero in Managers.Object.Heroes) {
+            if (hero.HeroMoveState == EHeroMoveState.ReturnToCamp) {
+                return;
+            }
+        }
+
+        foreach (var hero in Managers.Object.Heroes) {
+            if (hero.CreatureState == ECreatureState.Idle) {
+                hero.ChangeColliderSize(EColliderSize.Big);
+            }
+        }
+    }
+
+    public override void OnAnimEventHandler(TrackEntry trackEntry, Spine.Event e) {
+        base.OnAnimEventHandler(trackEntry, e);
+
+        // TODO
+        CreatureState = ECreatureState.Move;
+
+        // Skill
+        if (_target.IsValid() == false) {
+            return;
+        }
+
+        _target.OnDamaged(this);
     }
 }

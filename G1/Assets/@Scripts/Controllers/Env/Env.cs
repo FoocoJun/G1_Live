@@ -60,4 +60,40 @@ public class Env : BaseObject {
                 break;
         }
     }
+
+    public override void OnDamaged(BaseObject attacker) {
+        if (EnvState == EEnvState.Dead) {
+            return;
+        }
+
+        base.OnDamaged(attacker);
+
+        if (attacker.IsValid() == false) {
+            return;
+        }
+
+        Creature creature = attacker as Creature;
+
+        if (creature == null) {
+            return;
+        }
+
+        float finalDamage = 1;
+        HP = Mathf.Clamp(HP - finalDamage, 0, MaxHp);
+        EnvState = EEnvState.OnDamaged;
+
+        if (HP <= 0) {
+            OnDead(attacker);
+        }
+    }
+
+    public override void OnDead(BaseObject attacker) {
+        base.OnDead(attacker);
+
+        EnvState = EEnvState.Dead;
+
+        // TODO : Drop Item;
+
+        Managers.Object.Despawn(this);
+    }
 }
