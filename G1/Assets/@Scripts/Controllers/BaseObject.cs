@@ -87,6 +87,10 @@ public class BaseObject : InitBase
 
         SkeletonAnim.Skeleton.ScaleX = flag ? -1 : 1;
     }
+
+    public virtual void OnAnimEventHandler(TrackEntry trackEntry, Spine.Event e) {
+        Debug.Log("OnAnimEventHandler");
+    }
     #endregion
 
     public void SetRigidBodyVelocity(Vector2 velocity) {
@@ -102,4 +106,15 @@ public class BaseObject : InitBase
             LookLeft = false;
         }
     }
+
+    #region Battle
+    public virtual void OnDamaged(BaseObject attacker) {
+
+    }
+
+    public virtual void OnDead(BaseObject attacker) {
+        
+    }
+    
+    #endregion
 }
