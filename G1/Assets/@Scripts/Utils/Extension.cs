@@ -33,14 +33,6 @@ public static class Extension {
         }
     }
 
-    // transform에 TranslateEx를 추가해주는 방식
-    public static void TranslateEx(this Transform transform, Vector3 dir) {
-        BaseObject bo = transform.gameObject.GetComponent<BaseObject>();
-        if (bo != null) {
-            bo.TranslateEx(dir);
-        }
-    }
-
     public static void Shuffle<T>(this IList<T> list) {
         int n = list.Count;
 

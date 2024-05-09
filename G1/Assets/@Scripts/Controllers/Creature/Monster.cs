@@ -61,8 +61,6 @@ public class Monster : Creature {
     Vector3 _initPos;
 
     protected override void UpdateIdle() {
-        Debug.Log("Idle");
-
         // Patrol
         {
             int patrolPercent = 10;
@@ -108,18 +106,17 @@ public class Monster : Creature {
     }
 
     protected override void UpdateMove() {
-        Debug.Log("Move");
-
         if (_target == null) {
             // Patrol or Return
             Vector3 dir = _destPos - transform.position;
-            float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * MoveSpeed);
-            transform.TranslateEx(dir.normalized * moveDist);
 
             // 충분히 Return 했으면
             if (dir.sqrMagnitude <= 0.01f) {
                 CreatureState = ECreatureState.Idle;
+                return;
             }
+
+            SetRigidBodyVelocity(dir.normalized * MoveSpeed);
 
         } else {
             Vector3 dir = _target.transform.position - transform.position;
@@ -132,8 +129,7 @@ public class Monster : Creature {
                 StartWait(2.0f);
             } else {
                 // 공격범위 밖
-                float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * MoveSpeed);
-                transform.TranslateEx(dir.normalized * moveDist);
+                SetRigidBodyVelocity(dir.normalized * MoveSpeed);
 
                 // 너무 멀어지면 포기
                 float searchDistanceSqr = SearchDistance * SearchDistance;
@@ -147,8 +143,6 @@ public class Monster : Creature {
     }
 
     protected override void UpdateSkill() {
-        Debug.Log("Skill");
-
         if (_coWait != null) {
             return;
         }
@@ -157,7 +151,6 @@ public class Monster : Creature {
     }
 
     protected override void UpdateDead() {
-        Debug.Log("Dead");
     }
     #endregion
 }
