@@ -67,6 +67,12 @@ public static class Define
         Dead,
     }
 
+    public enum EColliderSize {
+        Small,
+        Normal,
+        Big,
+    }
+
     public enum ELayer {
         Default = 0,
         TransparentFX = 1,
