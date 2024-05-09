@@ -52,6 +52,15 @@ public static class Define
         Dead,
     }
 
+    // 캐릭터가 움직이는 사유
+    public enum EHeroMoveState {
+        None,
+        TargetMonster,
+        CollectEnv,
+        ReturnToCamp,
+        ForceMove,
+    }
+
     public enum EEnvState {
         Idle,
         OnDamaged,
