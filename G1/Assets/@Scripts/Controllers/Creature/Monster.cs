@@ -34,7 +34,7 @@ public class Monster : Creature {
         }
 
         CreatureType = ECreatureType.Monster;
-        Speed = 3.0f;
+        MoveSpeed = 3.0f;
 
         StartCoroutine(CoUpdateAI());
 
@@ -113,7 +113,7 @@ public class Monster : Creature {
         if (_target == null) {
             // Patrol or Return
             Vector3 dir = _destPos - transform.position;
-            float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * Speed);
+            float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * MoveSpeed);
             transform.TranslateEx(dir.normalized * moveDist);
 
             // 충분히 Return 했으면
@@ -132,7 +132,7 @@ public class Monster : Creature {
                 StartWait(2.0f);
             } else {
                 // 공격범위 밖
-                float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * Speed);
+                float moveDist = Mathf.Min(dir.magnitude, Time.deltaTime * MoveSpeed);
                 transform.TranslateEx(dir.normalized * moveDist);
 
                 // 너무 멀어지면 포기

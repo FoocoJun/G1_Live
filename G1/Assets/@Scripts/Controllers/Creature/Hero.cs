@@ -5,7 +5,6 @@ using UnityEngine.UIElements;
 using static Define;
 
 public class Hero : Creature {
-    private Vector2 _moveDir = Vector2.zero;
     public override bool Init() {
         if (base.Init() == false) {
             return false;
@@ -13,21 +12,18 @@ public class Hero : Creature {
 
         CreatureType = ECreatureType.Hero;
         CreatureState = ECreatureState.Idle;
-        Speed = 5.0f;
 
-        Managers.Game.OnMoveDirChanged -= HandleOnMoveDirChanged;
-        Managers.Game.OnMoveDirChanged += HandleOnMoveDirChanged;
         Managers.Game.OnJoystickStateChanged -= HandleOnJoystickStateChanged;
         Managers.Game.OnJoystickStateChanged += HandleOnJoystickStateChanged;
 
         return true;
     }
 
-    void Update() {
-        transform.TranslateEx(_moveDir * Time.deltaTime * Speed);
-    }
-    private void HandleOnMoveDirChanged(Vector2 dir) {
-        _moveDir = dir;
+    public override void SetInfo(int templateId) {
+        base.SetInfo(templateId);
+
+        // State
+        CreatureState = ECreatureState.Idle;
     }
 
     private void HandleOnJoystickStateChanged(EJoystickState joystickState) {

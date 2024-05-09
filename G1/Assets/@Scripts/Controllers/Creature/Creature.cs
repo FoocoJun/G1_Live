@@ -6,9 +6,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using static Define;
 
-public class Creature : BaseObject
-{
-    public float Speed = 8.0f;
+public class Creature : BaseObject {
     public Data.CreatureData CreatureData { get; private set; }
     public ECreatureType CreatureType { get; protected set; } = ECreatureType.None;
 
