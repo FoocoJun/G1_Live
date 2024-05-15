@@ -75,7 +75,12 @@ public class Creature : BaseObject {
     public virtual void SetInfo(int templateId) {
         DataTemplateID = templateId;
 
-        CreatureData = Managers.Data.MonsterDic[templateId];
+
+        if (CreatureType == ECreatureType.Hero) {
+            CreatureData = Managers.Data.HeroDic[templateId];
+        } else if (CreatureType == ECreatureType.Monster) {
+            CreatureData = Managers.Data.MonsterDic[templateId];
+        }
 
         gameObject.name = $"{CreatureData.DataId}_{CreatureData.DescriptionTextID}";
         
@@ -102,7 +107,6 @@ public class Creature : BaseObject {
         HP = CreatureData.MaxHp;
         MaxHp = CreatureData.MaxHp;
         Atk = CreatureData.Atk;
-
         MoveSpeed = CreatureData.MoveSpeed;
 
         CreatureState = ECreatureState.Idle;
