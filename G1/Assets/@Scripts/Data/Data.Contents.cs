@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Data {
+	// 구조로서의 최상위
     #region CreatureData
 	[Serializable]
 	public class CreatureData
@@ -27,24 +28,50 @@ namespace Data {
 		public float AtkRate;
 		public float DefRate;
 		public float MoveSpeedRate;
+		public string IconImage;
 		public string SkeletonDataID;
 		public string AnimatorName;
 		public List<int> SkillIdList = new List<int>();
-		public int DropItemId;
     }
+    #endregion
 
-    [Serializable]
-    public class CreatureDataLoader : ILoader<int, CreatureData> {
-        public List<CreatureData> creatures = new List<CreatureData>();
-        public Dictionary<int, CreatureData> MakeDict() {
-            Dictionary<int, CreatureData> dict = new Dictionary<int, CreatureData>();
-            foreach (CreatureData creature in creatures) {
-                dict.Add(creature.DataId, creature);
+	// CreatureData를 상속받은 몬스터
+	#region MonsterData
+	[Serializable]
+	public class MonsterData : CreatureData {
+		public int DropItemId;
+	}
+
+	public class MonsterDataLoader : ILoader<int, MonsterData> {
+        public List<MonsterData> monsters = new List<MonsterData>();
+        public Dictionary<int, MonsterData> MakeDict() {
+            Dictionary<int, MonsterData> dict = new Dictionary<int, MonsterData>();
+            foreach (MonsterData monster in monsters) {
+                dict.Add(monster.DataId, monster);
             }
             return dict;
         }
     }
-    #endregion
+	#endregion
+
+	// CreatureData를 상속받은 Hero
+	#region HeroData
+	[Serializable]
+	public class HeroData : CreatureData {
+
+	}
+
+	public class HeroDataLoader : ILoader<int, HeroData> {
+        public List<HeroData> heros = new List<HeroData>();
+        public Dictionary<int, HeroData> MakeDict() {
+            Dictionary<int, HeroData> dict = new Dictionary<int, HeroData>();
+            foreach (HeroData hero in heros) {
+                dict.Add(hero.DataId, hero);
+            }
+            return dict;
+        }
+    }
+	#endregion
 
     #region EnvData
 	[Serializable]
