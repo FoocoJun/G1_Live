@@ -24,6 +24,11 @@ public static class Extension {
             return false;
         }
 
+        Creature creature = bo as Creature;
+        if (creature != null) {
+            return creature.CreatureState != Define.ECreatureState.Dead;
+        }
+
         return true;
     }
 

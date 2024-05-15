@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Managers : MonoBehaviour
 {
+    public static bool Initialized { get; set; } = false;
     private static Managers s_instance;
     private static Managers Instance { get { Init(); return s_instance; }}
 
@@ -36,7 +37,9 @@ public class Managers : MonoBehaviour
 
     // 게임 생성 시 @Managers 라는 게임 오브젝트 생성 및 컴포넌트 할당
     public static void Init() {
-        if (s_instance == null) {
+        if (s_instance == null && Initialized == false) {
+            Initialized = true;
+
             GameObject go = GameObject.Find("@Managers");
             if (go == null) {
                 go = new GameObject { name = "@Managers" };

@@ -46,6 +46,10 @@ public class Monster : Creature {
 
         // State
         CreatureState = ECreatureState.Idle;
+
+        // Skill
+        Skills = gameObject.GetOrAddComponent<SkillComponent>();
+        Skills.SetInfo(this, CreatureData.SkillIdList);
     }
 
     // Init 당시에는 position이 선언되어 있지 않음
@@ -54,9 +58,6 @@ public class Monster : Creature {
     }
 
     #region AI
-    public float SearchDistance { get; private set; } = 8.0f;
-    public float AttacnDistance { get; private set; } = 4.0f;
-    Creature _target;
     Vector3 _destPos;
     Vector3 _initPos;
 
@@ -73,40 +74,16 @@ public class Monster : Creature {
         }
 
         // Search Player
-        {
-            Creature target = null;
-            float bestDistanceSqr = float.MaxValue;
-            // 제곱연산인 이유 - 현재는 크기 비교만 하면 되기 때문. (루트연산 비용이 훨 크기 때문)
-            float searchDistanceSqr = SearchDistance * SearchDistance;
-
-            foreach (Hero hero in Managers.Object.Heroes) {
-                Vector3 dir = hero.transform.position - transform.position;
-                float distToTargetSqr = dir.sqrMagnitude;
-
-                Debug.Log(distToTargetSqr);
-
-                if (distToTargetSqr > searchDistanceSqr) {
-                    continue;
-                }
-
-                if (distToTargetSqr > bestDistanceSqr) {
-                    continue;
-                }
-
-                target = hero;
-                bestDistanceSqr = distToTargetSqr;
-            }
-
-            _target = target;
-
-            if (_target != null) {
-                CreatureState = ECreatureState.Move;
-            }
+        Creature creature = FindClosestInRange(MONSTER_SEARCH_DISTANCE, Managers.Object.Heroes, func: IsValid) as Creature;
+        if (creature != null) {
+            Target = creature;
+            CreatureState = ECreatureState.Move;
+            return;
         }
     }
 
     protected override void UpdateMove() {
-        if (_target == null) {
+        if (Target == null) {
             // Patrol or Return
             Vector3 dir = _destPos - transform.position;
 
@@ -119,48 +96,40 @@ public class Monster : Creature {
             SetRigidBodyVelocity(dir.normalized * MoveSpeed);
 
         } else {
-            Vector3 dir = _target.transform.position - transform.position;
-            float distToTargetSqr = dir.sqrMagnitude;
-            float attackDistanceSqr = AttacnDistance * AttacnDistance;
+            // Chase
+            SkillBase skill = Skills.GetReadySkill();
+            ChaseOrAttackTarget(MONSTER_SEARCH_DISTANCE, skill);
 
-            if (distToTargetSqr < attackDistanceSqr) {
-                // 공격범위 이내
-                CreatureState = ECreatureState.Skill;
-                StartWait(2.0f);
-            } else {
-                // 공격범위 밖
-                SetRigidBodyVelocity(dir.normalized * MoveSpeed);
-
-                // 너무 멀어지면 포기
-                float searchDistanceSqr = SearchDistance * SearchDistance;
-                if (distToTargetSqr > searchDistanceSqr) {
-                    _destPos = _initPos;
-                    _target = null;
-                    CreatureState = ECreatureState.Move;
-                }
+            // 멀어지면 포기
+            if (Target.IsValid() == false) {
+                Target = null;
+                _destPos = _initPos;
+                return;
             }
         }
     }
 
     protected override void UpdateSkill() {
-        if (_coWait != null) {
-            return;
-        }
-
-        CreatureState = ECreatureState.Move;
+        if (Target.IsValid() == false) {
+			Target = null;
+			_destPos = _initPos;
+			CreatureState = ECreatureState.Move;
+			return;
+		}
     }
 
     protected override void UpdateDead() {
+        SetRigidBodyVelocity(Vector2.zero);
     }
     #endregion
 
     #region Battle
-    public override void OnDamaged(BaseObject attacker) {
-        base.OnDamaged(attacker);
+    public override void OnDamaged(BaseObject attacker, SkillBase skill) {
+        base.OnDamaged(attacker, skill);
     }
 
-    public override void OnDead(BaseObject attacker) {
-        base.OnDead(attacker);
+    public override void OnDead(BaseObject attacker, SkillBase skill) {
+        base.OnDead(attacker, skill);
 
         // TODO : Drop Item
 

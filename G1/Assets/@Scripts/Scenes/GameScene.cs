@@ -38,7 +38,6 @@ public class GameScene : BaseScene {
             Vector3 monsterTmpStartPosition = new Vector3Int(0, 1, 0);
             Monster monster = Managers.Object.Spawn<Monster>(monsterTmpStartPosition, MONSTER_BEAR_ID);
             Monster monster2 = Managers.Object.Spawn<Monster>(monsterTmpStartPosition, MONSTER_SLIME_ID);
-            Monster monster3 = Managers.Object.Spawn<Monster>(monsterTmpStartPosition, MONSTER_GOBLIN_ARCHER_ID);
         }
 
         {

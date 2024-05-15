@@ -7,6 +7,10 @@ using UnityEngine.Rendering;
 using static Define;
 
 public class Creature : BaseObject {
+    
+    public BaseObject Target { get; protected set; }
+    public SkillComponent Skills {get; protected set; }
+
     public Data.CreatureData CreatureData { get; private set; }
     public ECreatureType CreatureType { get; protected set; } = ECreatureType.None;
 
@@ -48,7 +52,7 @@ public class Creature : BaseObject {
             PlayAnimation(0, AnimName.IDLE, true);
             break;
             case ECreatureState.Skill:
-            PlayAnimation(0, AnimName.ATTACK_A, true);
+            // PlayAnimation(0, AnimName.ATTACK_A, true);
             break;
             case ECreatureState.Move:
             PlayAnimation(0, AnimName.MOVE, true);
@@ -162,8 +166,8 @@ public class Creature : BaseObject {
     #endregion
 
     #region Battle
-    public override void OnDamaged(BaseObject attacker) {
-        base.OnDamaged(attacker);
+    public override void OnDamaged(BaseObject attacker, SkillBase skill) {
+        base.OnDamaged(attacker, skill);
 
         if (attacker.IsValid() == false) {
             return;
@@ -179,34 +183,87 @@ public class Creature : BaseObject {
         HP = Mathf.Clamp(HP - finalDamage, 0, MaxHp);
 
         if (HP <= 0) {
-            OnDead(attacker);
+            OnDead(attacker, skill);
             CreatureState = ECreatureState.Dead;
         }
     }
 
-    public override void OnDead(BaseObject attacker) {
-        base.OnDead(attacker);
+    public override void OnDead(BaseObject attacker, SkillBase skill) {
+        base.OnDead(attacker, skill);
+    }
+
+    protected BaseObject FindClosestInRange(float range, IEnumerable<BaseObject> objs, Func<BaseObject, bool> func = null) {
+        BaseObject target = null;
+        float bestDistanceSqr = float.MaxValue;
+        float searchDistanceSqr = range * range;
+
+        foreach(BaseObject obj in objs) {
+            Vector3 dir = obj.transform.position - transform.position;
+            float distToTargetSqr = dir.sqrMagnitude;
+
+            // 서치 범위보다 멀리 있으면 스킵.
+            if (distToTargetSqr > searchDistanceSqr) {
+                continue;
+            }
+
+            // 이미 더 좋은 후보를 찾았으면 스킵.
+            if (distToTargetSqr > bestDistanceSqr) {
+                continue;
+            }
+
+            // 추가 조건
+            if (func != null && func.Invoke(obj) == false) {
+                continue;
+            }
+
+            target = obj;
+            bestDistanceSqr = distToTargetSqr;
+        }
+
+        return target;
+    }
+
+    /// <summary>
+    /// 타겟을 추격 혹은 공격
+    /// </summary>
+    /// <param name="attackRange">공격 사정거리</param>
+    /// <param name="chaseRange">최대 추격거리</param>
+    protected void ChaseOrAttackTarget(float chaseRange, SkillBase skill) {
+        Vector3 dir = Target.transform.position - transform.position;
+        float distToTargetSqr = dir.sqrMagnitude;
+
+        float attackRange = HERO_DEFAULT_MELEE_ATTACK_RANGE;
+        if (skill.SkillData.ProjectileId != 0) {
+            attackRange = HERO_DEFAULT_RANGED_ATTACK_RANGE;
+        }
+
+        float finalAttackRange = attackRange + Target.ColliderRadius + ColliderRadius;
+
+        float attackDistanceSqr = finalAttackRange * finalAttackRange;
+
+        if (distToTargetSqr > attackDistanceSqr) {
+            // 좇아가기
+            SetRigidBodyVelocity(dir.normalized * MoveSpeed);
+            CreatureState = ECreatureState.Move;
+
+            // 너무 멀어지면 포기
+            float searchDistanceSqr = chaseRange * chaseRange;
+            
+            if (distToTargetSqr > searchDistanceSqr) {
+                Target = null;
+            }
+
+        } else {
+            CreatureState = ECreatureState.Skill;
+            skill.DoSkill();
+            return;
+        }
     }
     #endregion
 
-    #region  Wait
-    protected Coroutine _coWait;
-
-    protected void StartWait(float seconds) {
-        CancelWait();
-        _coWait = StartCoroutine(CoWait(seconds));
-    }
-    
-    IEnumerator CoWait(float seconds) {
-        yield return new WaitForSeconds(seconds);
-        _coWait = null;
-    }
-
-    protected void CancelWait() {
-        if (_coWait != null) {
-            StopCoroutine(_coWait);
-        }
-        _coWait = null;
+    #region Misc
+    protected bool IsValid(BaseObject bo) {
+        return bo.IsValid();
     }
     #endregion
 }

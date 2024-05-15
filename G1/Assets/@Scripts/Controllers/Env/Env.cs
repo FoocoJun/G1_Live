@@ -61,12 +61,12 @@ public class Env : BaseObject {
         }
     }
 
-    public override void OnDamaged(BaseObject attacker) {
+    public override void OnDamaged(BaseObject attacker, SkillBase skill) {
         if (EnvState == EEnvState.Dead) {
             return;
         }
 
-        base.OnDamaged(attacker);
+        base.OnDamaged(attacker, skill);
 
         if (attacker.IsValid() == false) {
             return;
@@ -83,12 +83,12 @@ public class Env : BaseObject {
         EnvState = EEnvState.OnDamaged;
 
         if (HP <= 0) {
-            OnDead(attacker);
+            OnDead(attacker, skill);
         }
     }
 
-    public override void OnDead(BaseObject attacker) {
-        base.OnDead(attacker);
+    public override void OnDead(BaseObject attacker, SkillBase skill) {
+        base.OnDead(attacker, skill);
 
         EnvState = EEnvState.Dead;
 
