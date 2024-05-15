@@ -37,12 +37,6 @@ public class ObjectManager {
         BaseObject obj = go.GetComponent<BaseObject>();
 
         if (obj.ObjectType == EObjectType.Creature) {
-
-            if (templateID != 0 && Managers.Data.MonsterDic.TryGetValue(templateID, out Data.MonsterData data) == false) {
-                Debug.LogError($"ObjectManager Spawn Creature Failed! TryGetValue TemplateID : {templateID}");
-                return null;
-            }
-
             Creature creature = go.GetComponent<Creature>();
             switch (creature.CreatureType) {
                 case ECreatureType.Hero:
