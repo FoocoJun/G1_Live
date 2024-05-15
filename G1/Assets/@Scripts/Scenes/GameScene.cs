@@ -29,14 +29,16 @@ public class GameScene : BaseScene {
 
         // 캐릭터 생성        
         for (int i = 0; i< 4; i++) {
+            int heroTemplateId = HERO_WIZARD_ID + Random.Range(0, 5);
             Vector3 subHeroTmpStartPosition = new Vector3Int(-10 + Random.Range(-5, 5), -5 + Random.Range(-5, 5), 0);
-            Hero hero = Managers.Object.Spawn<Hero>(subHeroTmpStartPosition, HERO_KNIGHT_ID);
+            Hero hero = Managers.Object.Spawn<Hero>(subHeroTmpStartPosition, heroTemplateId);
         }
 
         {
             Vector3 monsterTmpStartPosition = new Vector3Int(0, 1, 0);
             Monster monster = Managers.Object.Spawn<Monster>(monsterTmpStartPosition, MONSTER_BEAR_ID);
             Monster monster2 = Managers.Object.Spawn<Monster>(monsterTmpStartPosition, MONSTER_SLIME_ID);
+            Monster monster3 = Managers.Object.Spawn<Monster>(monsterTmpStartPosition, MONSTER_GOBLIN_ARCHER_ID);
         }
 
         {
