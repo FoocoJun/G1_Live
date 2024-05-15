@@ -75,7 +75,7 @@ public class Creature : BaseObject {
     public virtual void SetInfo(int templateId) {
         DataTemplateID = templateId;
 
-        CreatureData = Managers.Data.CreatureDic[templateId];
+        CreatureData = Managers.Data.MonsterDic[templateId];
 
         gameObject.name = $"{CreatureData.DataId}_{CreatureData.DescriptionTextID}";
         
